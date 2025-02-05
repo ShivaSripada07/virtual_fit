@@ -1,0 +1,20 @@
+{
+  "someshrocks144@gmail.com127.0.0.1": [
+    {
+      "name": "Blue Houndstooth Pattern Turtle Neck Top",
+      "brand": "StylishCoat",
+      "price": "4799",
+      "img": "./static/assets/women/jackets/07429_00.jpg",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "rating": "4.7",
+      "reviews": "20",
+      "category": "jackets",
+      "index": 3
+    }
+  ]
+}

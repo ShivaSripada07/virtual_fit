@@ -1,0 +1,404 @@
+{% extends 'layout.html' %} {% block content %}
+<div class="h-[90vh] w-full">
+  <div class="flex h-full w-full justify-center items-center">
+    <!-- Product Details -->
+    <div class="w-[70%] p-6 bg-zinc-300">
+      <h2 class="text-sm font-semibold mb-4">
+        {{ gender }} > {{ product.category }} > {{ product.name }}
+      </h2>
+
+      <div class="flex gap-6">
+        <div class="bg-white h-[250px] p-4 mb-4 w-[50%]">
+          <img
+            src="{{ url_for('static', filename=img) }}"
+            id="img"
+            alt="{{ product.name }}"
+            class="object-contain h-full w-full"
+          />
+        </div>
+        <div class="flex flex-col w-[50%]">
+          <p class="text-3xl font-semibold">{{ product.brand }}</p>
+          <p class="text-md">{{ product.name }}</p>
+
+          <div
+            class="bg-zinc-200 mt-1 flex items-center gap-2 rounded-3xl px-2 border-[1px] border-zinc-500 w-fit"
+          >
+            <div class="flex item-center gap-1 justify-center p-1">
+              {{ product.rating }}
+              <i class="bi bi-star-fill text-green-500"></i>
+            </div>
+            <div class="border-l-[1px] border-zinc-500 p-1">
+              {{ product.reviews }} Reviews
+            </div>
+          </div>
+
+          <div class="my-2 h-[1px] bg-slate-400 w-full"></div>
+
+          <p class="text-3xl font-semibold">₹ {{ product.price }}</p>
+          <p class="font-semibold text-emerald-600 text-sm">
+            (inclusive of all taxes)
+          </p>
+
+          <div class="flex flex-col my-2">
+            <h4 class="text-xl font-semibold">Select Size</h4>
+            <div class="flex gap-3 mt-1">
+              <div
+                class="rounded-full border-2 border-zinc-500 h-9 w-9 flex items-center justify-center"
+              >
+                S
+              </div>
+              <div
+                class="rounded-full border-2 border-zinc-500 h-9 w-9 flex items-center justify-center"
+              >
+                M
+              </div>
+              <div
+                class="rounded-full border-2 border-zinc-500 h-9 w-9 flex items-center justify-center"
+              >
+                L
+              </div>
+              <div
+                class="rounded-full border-2 border-zinc-500 h-9 w-9 flex items-center justify-center"
+              >
+                XL
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-4 items-center mt-6">
+        <button
+          class="bg-green-500 text-white font-semibold py-2 px-4 rounded-md"
+        >
+          Buy Now
+        </button>
+        <button
+          class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md"
+          id="tryButton"
+        >
+          Try It
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 1: File Upload -->
+  <div
+    id="modal"
+    class="hidden h-[100vh] w-[100vw] fixed left-0 top-0 bg-[rgba(0,0,0,0.8)] flex justify-center items-center"
+  >
+    <div class="relative bg-white rounded-md p-4 flex w-[40vw]">
+      <div
+        class="p-2 h-[30px] w-[30px] rounded-full bg-zinc-600 text-white font-bold flex items-center justify-center absolute top-1 right-1 cursor-pointer"
+        id="closeModalButton"
+      >
+        X
+      </div>
+      <div class="upload-container">
+        <div class="upload-mid-section">
+          <input
+            accept="image/*"
+            type="file"
+            id="fileInput"
+            multiple="false"
+            hidden
+          />
+          <div
+            class="file-upload"
+            onclick="browseFiles()"
+            id="dragDropArea"
+            ondragover="event.preventDefault()"
+            ondrop="handleDrop(event)"
+          >
+            <div>Click to Browse or Drag and Drop your Image here.</div>
+          </div>
+
+          <div class="uploading-area"></div>
+
+          <button class="upload-btn" id="uploadButton">Upload File</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Display Uploaded Image -->
+  <div
+    id="modal2"
+    class="hidden h-[100vh] w-[100vw] fixed left-0 top-0 bg-[rgba(0,0,0,0.8)] flex justify-center items-center"
+  >
+    <div
+      class="relative bg-white rounded-md p-8 flex flex-col w-[500px] h-[600px] overflow-auto"
+    >
+      <h4>This is how it will look on you !</h4>
+
+      <div
+        class="p-2 h-[30px] w-[30px] rounded-full bg-zinc-600 text-white font-bold flex items-center justify-center absolute top-1 right-1 cursor-pointer"
+        id="closeModal2Button"
+      >
+        X
+      </div>
+
+      <img
+        id="finalImage"
+        src=""
+        alt=""
+        class="mt-4 w-full h-full object-cover"
+      />
+    </div>
+  </div>
+</div>
+
+<script>
+  // Ensure the code runs after the page has loaded
+  document.addEventListener("DOMContentLoaded", function () {
+    // Function to browse and select files
+    function browseFiles() {
+      console.log("Selecting file");
+      fileInput.click();
+    }
+
+    // Get modal elements
+    const tryButton = document.getElementById("tryButton");
+    const closeModalButton = document.getElementById("closeModalButton");
+    const closeModal2Button = document.getElementById("closeModal2Button");
+    const modal = document.getElementById("modal");
+    const modal2 = document.getElementById("modal2");
+
+    // Track modal state
+    let modalOpen = false;
+    let modalOpen2 = false;
+
+    // Event listener for opening the modal
+    tryButton.addEventListener("click", function () {
+      toggleModal(modal);
+    });
+
+    // Event listener for closing modal1
+    closeModalButton.addEventListener("click", function () {
+      toggleModal(modal);
+    });
+
+    // Event listener for closing modal2
+    closeModal2Button.addEventListener("click", function () {
+      toggleModal(modal2);
+    });
+
+    // Function to toggle modal visibility
+    function toggleModal(modal) {
+      if (modal.classList.contains("hidden")) {
+        modal.classList.remove("hidden");
+        modal.style.display = "flex";
+      } else {
+        modal.classList.add("hidden");
+        modal.style.display = "none";
+      }
+    }
+
+    // File upload logic
+    const dragDropArea = document.getElementById("dragDropArea");
+    const fileInput = document.getElementById("fileInput");
+    const uploadingArea = document.querySelector(".uploading-area");
+    const clothingImage = document.getElementById("img"); // Image element for clothing
+
+    // Drag and drop event listeners
+    dragDropArea.addEventListener("dragover", function (e) {
+      e.preventDefault();
+      this.classList.add("drag-over");
+    });
+
+    dragDropArea.addEventListener("dragleave", function () {
+      this.classList.remove("drag-over");
+    });
+
+    dragDropArea.addEventListener("drop", function (e) {
+      e.preventDefault();
+      this.classList.remove("drag-over");
+      handleFiles(e.dataTransfer.files[0]);
+    });
+
+    // File input change event
+    fileInput.addEventListener("change", function () {
+      console.log(this.files[0]);
+      handleFiles(this.files[0]);
+    });
+
+    function handleFiles(file) {
+      uploadingArea.innerHTML = "";
+      const status = document.querySelector("h3");
+      if (status) status.remove();
+
+      const uploadingFileDiv = document.createElement("div");
+      uploadingFileDiv.classList.add("uploading-file");
+      uploadingFileDiv.innerHTML = `<img src="{{ url_for('static', filename='assets/file-earmark-check-fill.svg') }}" alt="">
+                      <div>${file.name}</div>
+                      <div id="progress-bar"></div>`;
+
+      uploadingArea.appendChild(uploadingFileDiv);
+      simulateFileUpload(file, uploadingFileDiv);
+    }
+
+    function simulateFileUpload(file, progressDiv) {
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.random() * 20; // Simulating progress
+        progress = Math.min(progress, 100);
+
+        progressDiv.querySelector("#progress-bar").style.width = `${progress}%`;
+
+        if (progress === 100) {
+          clearInterval(interval);
+          onUploadComplete(file, progressDiv);
+        }
+      }, 500);
+    }
+
+    function onUploadComplete(file, progressDiv) {
+      const uploadedFileDiv = document.createElement("div");
+      uploadedFileDiv.classList.add("uploaded-file");
+      uploadedFileDiv.innerHTML = ` <img src="{{ url_for('static', filename='assets/file-earmark-check-fill.svg') }}" alt=""> <div>${file.name}</div> `;
+
+      uploadingArea.appendChild(uploadedFileDiv);
+      progressDiv.remove();
+    }
+
+    // Attach event listener directly to uploadButton
+    const uploadButton = document.getElementById("uploadButton");
+    uploadButton.addEventListener("click", uploadFile);
+
+    async function uploadFile() {
+      console.log("Function working");
+
+      // Check if files are selected
+      if (fileInput.files.length === 0) {
+        alert("Please select an avatar image before uploading.");
+        return;
+      }
+      uploadButton.textContent = "Uploading... Please wait";
+      uploadButton.disabled = true;
+      const formData = new FormData();
+
+      // Check if clothingImage is a valid image source (Blob or File)
+      if (clothingImage.src) {
+        try {
+          // Fetch the image as a Blob
+          const response = await fetch(clothingImage.src);
+          const blob = await response.blob(); // Convert the image to a Blob
+
+          // Append the clothing image (as Blob) to the FormData
+          formData.append("clothing_image", blob, "clothing_image.jpg");
+        } catch (error) {
+          console.error("Error fetching clothing image:", error);
+          return;
+        }
+      }
+
+      // Append the avatar image file to FormData
+      formData.append("avatar_image", fileInput.files[0], "avatar_image.jpg");
+      console.log("Form Data appended");
+
+      // Send the form data to the backend
+      fetch("/upload", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json()) // Parse JSON response from server
+        .then((data) => {
+          console.log("Server Response:", data);
+          uploadButton.textContent = "Upload File";
+          uploadButton.disabled = false;
+
+          if (data.image_url) {
+            // Hide the file input modal and show the result image modal
+            toggleModal(modal);
+            toggleModal(modal2);
+
+            // Set the image source to the image URL returned from the backend
+            const imagePath = data.image_url; // Example: '/uploads/output_image.png'
+            document.getElementById("finalImage").src = imagePath; // Show the image in your element
+
+            // Send the uploaded file to /predict_size
+            predictSize(fileInput.files[0]);
+          } else {
+            console.error("Error:", data.error);
+          }
+        })
+        .catch((error) => {
+          console.error("Error during upload:", error);
+        });
+    }
+
+    // Function to send the file to /predict_size and display the results
+    async function predictSize(file) {
+      const formData = new FormData();
+      formData.append("file", file, file.name); // Append the file directly
+
+      // Send the form data to /predict_size
+      fetch("/predict_size", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json()) // Parse response as JSON
+        .then((rawData) => {
+          console.log("Raw Size Prediction Response:", rawData);
+
+          // Extract values for better readability
+          const { estimated_size, gender, measurements } = rawData;
+
+          // Format the measurements
+          const formattedMeasurements = `
+        <p><strong>Arm Length:</strong> ${measurements.arm_length ?? "N/A"}</p>
+        <p><strong>Leg Length:</strong> ${measurements.leg_length ?? "N/A"}</p>
+        <p><strong>Shoulder Width:</strong> ${
+          measurements.shoulder_width ?? "N/A"
+        } cm</p>
+        <p><strong>Estimated Height:</strong> ${
+          measurements.estimated_height ?? "N/A"
+        } cm</p>
+        <p><strong>Estimated Waist:</strong> ${
+          measurements.estimated_waist ?? "N/A"
+        } cm</p>
+      `;
+
+          // Select the modal content container
+          const modalContent = document.querySelector("#modal2 .relative");
+
+          // Keep the existing content (like the image) and append the new content
+          const existingContent = modalContent.innerHTML;
+
+          modalContent.innerHTML = `
+        ${existingContent} <!-- Preserve the image or previous content -->
+        <div class="mt-4">
+          <h4 class="text-xl font-semibold">Size Prediction Results</h4>
+          <p><strong>Estimated Size:</strong> ${estimated_size}</p>
+          <p><strong>Gender:</strong> ${gender}</p>
+          <h5 class="mt-2 font-semibold">Measurements:</h5>
+          <div class="bg-gray-100 p-4 rounded-lg text-sm">${formattedMeasurements}</div>
+        </div>
+      `;
+        })
+        .catch((error) => {
+          console.error("Error during size prediction:", error);
+        });
+    }
+
+    // Function to convert data URI to Blob
+    function dataURItoBlob(dataURI) {
+      const byteString = atob(dataURI.split(",")[1]);
+      const arrayBuffer = new ArrayBuffer(byteString.length);
+      const uintArray = new Uint8Array(arrayBuffer);
+
+      for (let i = 0; i < byteString.length; i++) {
+        uintArray[i] = byteString.charCodeAt(i);
+      }
+
+      return new Blob([uintArray], { type: "image/jpeg" });
+    }
+
+    // Ensure the browseFiles function is available when the drag-and-drop area is clicked
+    dragDropArea.onclick = browseFiles;
+  });
+</script>
+
+{% endblock %}

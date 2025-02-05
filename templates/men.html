@@ -1,0 +1,201 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="h-[90vh] ">
+    <div class="flex w-full">
+        <!-- sidebar -->
+        <div class="w-[15%] p-6 min-h-[90vh] border-r-2 border-gray text-black">
+            <h3 class="text-black mb-2">Filters</h3>
+
+            <!-- Toggle for T-Shirts -->
+            <label class="block mb-2">
+                <input type="checkbox" id="tshirtToggle" checked>
+                T-Shirts
+            </label>
+
+            <!-- Toggle for Jackets -->
+            <label class="block mb-2">
+                <input type="checkbox" id="jacketToggle" checked>
+                Jackets
+            </label>
+
+            <!-- Toggle for Shirts -->
+            <label class="block mb-4">
+                <input type="checkbox" id="shirtToggle" checked>
+                Shirts
+            </label>
+
+            <!-- Price Filter -->
+            <h4 class="mb-2">Price Filter</h4>
+            <label class="block mb-2">
+                <input type="radio" name="priceFilter" value="highToLow" checked>
+                High to Low
+            </label>
+            <label class="block">
+                <input type="radio" name="priceFilter" value="lowToHigh">
+                Low to High
+            </label>
+
+            <!-- Rating Filter -->
+            <h4 class="mb-2 mt-4">Rating Filter</h4>
+            <label class="block mb-2">
+                <input type="radio" name="ratingFilter" value="highToLow" checked>
+                High to Low
+            </label>
+            <label class="block">
+                <input type="radio" name="ratingFilter" value="lowToHigh">
+                Low to High
+            </label>
+        </div>
+
+        <!-- content -->
+        <div class="max-h-[80vh] overflow-y-scroll w-[85%] p-6">
+            <h2 class="text-2xl font-semibold mb-4">Men's Clothing Collection</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="productsContainer">
+                <!-- Render products dynamically here based on selected filters -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let data = {};
+
+    document.addEventListener('DOMContentLoaded', function () {
+        fetchData();
+        addEventListeners();
+    });
+
+    function addEventListeners() {
+        const tshirtToggle = document.getElementById('tshirtToggle');
+        const jacketToggle = document.getElementById('jacketToggle');
+        const shirtToggle = document.getElementById('shirtToggle');
+        const priceFilters = document.getElementsByName('priceFilter');
+        const ratingFilters = document.getElementsByName('ratingFilter');
+
+        tshirtToggle.addEventListener('change', renderProducts);
+        jacketToggle.addEventListener('change', renderProducts);
+        shirtToggle.addEventListener('change', renderProducts);
+
+        priceFilters.forEach(filter => {
+            filter.addEventListener('change', renderProducts);
+        });
+
+        ratingFilters.forEach(filter => {
+            filter.addEventListener('change', renderProducts);
+        });
+    }
+
+
+    async function fetchData() {
+        try {
+            const response = await fetch('/get_data');
+            if (response.ok) {
+                const dataset = await response.json();
+                data = JSON.parse(dataset);
+                console.log(data);
+                renderProducts();
+            } else {
+                console.error('Failed to fetch dataset');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    function renderProducts() {
+        const productsContainer = document.getElementById('productsContainer');
+        productsContainer.innerHTML = '';
+
+        const selectedTshirt = document.getElementById('tshirtToggle').checked;
+        const selectedJacket = document.getElementById('jacketToggle').checked;
+        const selectedShirt = document.getElementById('shirtToggle').checked;
+        const priceFilter = document.querySelector('input[name="priceFilter"]:checked').value;
+        const ratingFilter = document.querySelector('input[name="ratingFilter"]:checked').value;
+
+        let selectedProducts = [];
+
+        if (selectedTshirt) {
+            selectedProducts = selectedProducts.concat(data.men.tshirt);
+        }
+
+        if (selectedJacket) {
+            selectedProducts = selectedProducts.concat(data.men.jackets);
+        }
+
+        if (selectedShirt) {
+            selectedProducts = selectedProducts.concat(data.men.shirts);
+        }
+
+        // Apply price and rating filters
+
+        
+        
+        if(ratingFilter)
+        selectedProducts = selectedProducts
+            .filter(product => product.price !== undefined && product.rating !== undefined)
+            .sort((a, b) => {
+                if (ratingFilter === 'highToLow') {
+                    return parseFloat(b.rating) - parseFloat(a.rating);
+                } else {
+                    return parseFloat(a.rating) - parseFloat(b.rating);
+                }
+            })
+
+        if(priceFilter){
+            selectedProducts = selectedProducts
+            .filter(product => product.price !== undefined && product.rating !== undefined)
+            .sort((a, b) => {
+                if (priceFilter === 'highToLow') {
+                    return parseFloat(b.price) - parseFloat(a.price);
+                } else {
+                    return parseFloat(a.price) - parseFloat(b.price);
+                }
+            })
+        }
+
+        // Render filtered products
+        selectedProducts.forEach((product, index) => {
+        const productCard = document.createElement('div');
+        productCard.className = 'border p-4';
+        productCard.innerHTML = `
+            <img src="${product.img}" alt="${product.name}" class="mb-2 h-[300px] object-contain w-full">
+            <h3 class="text-lg font-semibold">${product.name}</h3>
+            <p>${product.brand}</p>
+            <p>Price: ${product.price}</p>
+            <p>Rating: ${product.rating}</p>
+            <p>Reviews: ${product.reviews}</p>
+
+            <div class="flex gap-2 items-center mt-4 w-full text-sm">
+                <button onclick="window.location.href='/men/${product.category}/${product.index}'" class="border-[1px] border-green-500 bg-green-500 text-white font-semibold rounded-md py-2 w-full"> Buy Now </button>
+                <button onClick="addToCart('${product.index}','${product.category}')" class="border-[1px] border-rose-400 rounded-md py-2 w-full flex items-baseline justify-center gap-2"> 
+                    <img src="../static/assets/bag-fill.svg" class="h-4 text-black fill-black"></img> 
+                    <span>Add to Cart</span>   
+                </button>
+            </div>
+        `;
+    productsContainer.appendChild(productCard);
+});
+
+    }
+
+    async function addToCart(index,category){
+
+        console.log(index,category)
+
+        const res = await fetch(`/add_to_cart/men/${category}/${index}`,{
+            method:"POST"
+        });
+        const data = await res.json();
+        console.log(data);
+
+        if(data.message){
+            alert("Item Added to Cart!");
+        }
+        else{
+            alert('Something Went Wrong. Try again later');
+        }
+    }
+</script>
+{% endblock %}

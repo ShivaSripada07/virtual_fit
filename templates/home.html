@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="h-[90vh] w-full bg-[#E3E3E1] relative">
+
+        <div class="absolute top-[50%] translate-y-[-50%] left-[5%] w-[50%]">
+            <h1 class="font-bold text-[80px]  leading-[85px]">Welcome to <span class="text-rose-400">Clothify !</span></h1>
+            <h3 class="text-3xl mt-6 font-semibold">Your one stop solution to Trendy Fashion</h3>
+            <p class="font-2xl mt-6 text-zinc-500 font-semibold">At Clothify, we understand that finding the perfect clothing can be a challenge. That's why we've introduced an innovative Try-On feature to revolutionize your shopping experience.</p>
+
+            <div class="flex w-[280px] justify-between mt-8 font-semibold">
+                <!-- <button class="w-[130px] bg-rose-500 text-white rounded-md p-2  cursor-pointer border-[1px] border-transparent hover:bg-transparent hover:border-[1px] hover:border-rose-500 hover:text-rose-400">Shop Men</button> -->
+                <button class="w-[130px] bg-rose-500 text-white rounded-md p-2  cursor-pointer border-[1px] border-transparent hover:bg-transparent hover:border-[1px] hover:border-rose-500 hover:text-rose-400"><a href="{{ url_for('women') }}">Shop Now</a></button>
+                
+            </div>
+        </div>
+
+        <img class="absolute bottom-0 right-10" src="../static/assets/fashion.png" alt="">
+    </div>
+
+    <script>
+
+
+        function getData()
+        {
+            console.log("chala")
+
+            fetch("https://gitcdn.link/cdn/seebham/ecommerce-dummy-data/main/data.json", {
+                method: "GET",
+                })
+                .then((response) => response.json().then((json) => console.log(json)))
+                .catch((err) => console.error(err));
+
+        }   
+        getData(); 
+    </script>
+{% endblock %}

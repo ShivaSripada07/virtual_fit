@@ -1,0 +1,164 @@
+{
+    "women": {
+        "tops": [
+            {
+                "name": "Fiorucci Angels Print Red Tee",
+                "brand": "Elegance",
+                "price": "1999",
+                "img": "./static/assets/women/tops/06429_00.jpg",
+                "sizes": ["S", "M", "L", "XL"],
+                "rating": "4.3",
+                "reviews": "18",
+                "category":"tops",
+                "index":0
+            },
+            {
+                "name": "Blue Houndstooth Pattern Turtle Neck Top",
+                "brand": "StripeChic",
+                "price": "1699",
+                "img": "./static/assets/women/tops/06802_00.jpg",
+                "sizes": ["S", "M", "L", "XL"],
+                "rating": "4.2",
+                "reviews": "15",
+                "category":"tops",
+                "index":1
+            },
+            {
+                "name": "Elegant Floral Print Sleeveless Blouse",
+                "brand": "CasualComfort",
+                "price": "1499",
+                "img": "./static/assets/women/tops/08348_00.jpg",
+                "sizes": ["S", "M", "L", "XL"],
+                "rating": "4.5",
+                "reviews": "14",
+                "category":"tops",
+                "index":2
+            },
+            {
+                "name": "Boho Style Camisole",
+                "brand": "BohoChic",
+                "price": "2199",
+                "img": "./static/assets/women/tops/11791_00.jpg",
+                "sizes": ["S", "M", "L", "XL"],
+                "rating": "4.7",
+                "reviews": "20",
+                "category":"tops",
+                "index":3
+            },
+            {
+                "name": "Off-Shoulder Elegance",
+                "brand": "ElegantShoulder",
+                "price": "1899",
+                "img": "./static/assets/women/tops/01430_00.jpg",
+                "sizes": ["S", "M", "L", "XL"],
+                "rating": "4.8",
+                "reviews": "22",
+                "category":"tops",
+                "index":4
+            }
+        ],
+        "jackets": [
+            {
+                "name": "Quilted Bomber Jacket",
+                "brand": "TrendyWear",
+                "price": "3999",
+                "img": "./static/assets/women/jackets/01260_00.jpg",
+                "sizes": ["S", "M", "L", "XL"],
+                "rating": "4.6",
+                "reviews": "16",
+                "category":"jackets",
+                "index":0
+            },
+            {
+                "name": "Denim Casual Jacket",
+                "brand": "DenimCasual",
+                "price": "3499",
+                "img": "./static/assets/women/jackets/03751_00.jpg",
+                "sizes": ["S", "M", "L", "XL"],
+                "rating": "4.4",
+                "reviews": "14",
+                "category":"jackets",
+                "index":1
+            },
+            {
+                "name": "Classic Leather Biker",
+                "brand": "LeatherChic",
+                "price": "4499",
+                "img": "./static/assets/women/jackets/06802_00.jpg",
+                "sizes": ["S", "M", "L", "XL"],
+                "rating": "4.8",
+                "reviews": "18",
+                "category":"jackets",
+                "index":2
+            },
+            {
+                "name": "Blue Houndstooth Pattern Turtle Neck Top",
+                "brand": "StylishCoat",
+                "price": "4799",
+                "img": "./static/assets/women/jackets/07429_00.jpg",
+                "sizes": ["S", "M", "L", "XL"],
+                "rating": "4.7",
+                "reviews": "20",
+                "category":"jackets",
+                "index":3
+            },
+            {
+                "name": "Delicate Lace Trim Grey Camisole",
+                "brand": "FurStyle",
+                "price": "5299",
+                "img": "./static/assets/women/jackets/09933_00.jpg",
+                "sizes": ["S", "M", "L", "XL"],
+                "rating": "4.9",
+                "reviews": "25",
+                "category":"jackets",
+                "index":4
+            }
+        ],
+        "dresses": [
+            {
+                "name": "Fiorucci Angels Print Red Tee",
+                "brand": "Elegance",
+                "price": "1999",
+                "img": "./static/assets/women/tops/06429_00.jpg",
+                "sizes": ["S", "M", "L", "XL"],
+                "rating": "4.3",
+                "reviews": "18",
+                "category":"tops",
+                "index":0
+            },
+            {
+                "name": "Blue Houndstooth Pattern Turtle Neck Top",
+                "brand": "StripeChic",
+                "price": "1699",
+                "img": "./static/assets/women/tops/06802_00.jpg",
+                "sizes": ["S", "M", "L", "XL"],
+                "rating": "4.2",
+                "reviews": "15",
+                "category":"tops",
+                "index":1
+            },
+            {
+                "name": "Denim Casual Jacket",
+                "brand": "DenimCasual",
+                "price": "3499",
+                "img": "./static/assets/women/jackets/03751_00.jpg",
+                "sizes": ["S", "M", "L", "XL"],
+                "rating": "4.4",
+                "reviews": "14",
+                "category":"jackets",
+                "index":1
+            },
+            {
+                "name": "Classic Leather Biker",
+                "brand": "LeatherChic",
+                "price": "4499",
+                "img": "./static/assets/women/casuals/11351_00.jpg",
+                "sizes": ["S", "M", "L", "XL"],
+                "rating": "4.8",
+                "reviews": "18",
+                "category":"jackets",
+                "index":2
+            }
+        ]
+    }
+}
